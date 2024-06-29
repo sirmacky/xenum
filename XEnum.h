@@ -134,84 +134,84 @@ namespace XEnum
 #define ImplementSimpleXEnumUnderlyingIndexDeclaration(_name_)  _name_,
 #define ImplementSimpleXEnumValArrayEntry(_name_) _name_,
 #define ImplementSimpleXEnumStrArrayEntry(_name_) #_name_,
-#define ImplementSimpleXEnumIndexOfCase(_name_) case _name_ : return static_cast<int>(underlying_enum_index :: _name_);		
+#define ImplementSimpleXEnumIndexOfCase(_name_) case _name_ : return static_cast<int>(underlying_enum_index :: _name_);        
 #define ImplementSimpleXEnumUnderlyingFlagDefinition(_name_) _name_ = 1 << static_cast<size_t>(underlying_enum_index :: _name_),
 
-#define ImplementSimpleXEnumUnderlyingEnumDeclarationFlags(_starting_val_, _first_val_, ...) 	\
-enum class underlying_enum : size_t									        					\
-{																								\
-    FOR_EACH(ImplementSimpleXEnumUnderlyingFlagDefinition, _first_val_, __VA_ARGS__)			\
+#define ImplementSimpleXEnumUnderlyingEnumDeclarationFlags(_starting_val_, _first_val_, ...)     \
+enum class underlying_enum : size_t                                                              \
+{                                                                                                \
+    FOR_EACH(ImplementSimpleXEnumUnderlyingFlagDefinition, _first_val_, __VA_ARGS__)             \
 };
 
-#define ImplementSimpleXEnumUnderlyingEnumDeclaration(_starting_val_, _first_val_, ...)	   	\
-enum class underlying_enum : underlying_type												\
-{																							\
-    _first_val_ = _starting_val_, 															\
-    __VA_ARGS__																				\
+#define ImplementSimpleXEnumUnderlyingEnumDeclaration(_starting_val_, _first_val_, ...)     \
+enum class underlying_enum : underlying_type                                                \
+{                                                                                           \
+    _first_val_ = _starting_val_,                                                           \
+    __VA_ARGS__                                                                             \
 };
 
-#define ImplementSimpleXEnum_FullDeclaration(_name_, _underlying_enum_macro_, _underlying_type_, _starting_val_, _first_val_, ...)	  \
-struct _name_ : public XEnum::EnumValue<_name_, _underlying_type_>																	  \
-{																																	  \
-    using this_type = _name_;																										  \
-    using EnumValue = XEnum::EnumValue<_name_, _underlying_type_>;																	  \
-                                                                                                                                      \
-private:																															  \
-                                                                                                                                      \
-    enum class underlying_enum_index : s																							  \
-    {																																  \
-        FOR_EACH(ImplementSimpleXEnumUnderlyingIndexDeclaration, _first_val_, __VA_ARGS__)											  \
-    };																																  \
-    _underlying_enum_macro_(_starting_val_, _first_val_, __VA_ARGS__)																  \
-                                                                                                                                      \
-public:																																  \
-                                                                                                                                      \
-    _name_() = delete;																												  \
-    constexpr _name_(const underlying_type& val) : EnumValue(val) {}																  \
-    constexpr _name_(const this_type& val) : EnumValue(val) {}																		  \
-    constexpr _name_(const EnumValue& val) : EnumValue(val) {}																		  \
-                                                                                                                                      \
-    FOR_EACH(ImplementSimpleXEnumValueDeclaration, _first_val_, __VA_ARGS__)														  \
-                                                                                                                                      \
-    static constexpr std::array Values =																							  \
-    {																																  \
-        FOR_EACH(ImplementSimpleXEnumValArrayEntry, _first_val_, __VA_ARGS__)														  \
-    };																																  \
-    static constexpr const char* CStrValues[] =																						  \
-    {																																  \
-        FOR_EACH(ImplementSimpleXEnumStrArrayEntry, _first_val_, __VA_ARGS__)														  \
-    };																																  \
-    static constexpr auto Count = Values.size();																					  \
-                                                                                                                                      \
-    static constexpr std::string ToString(const EnumValue& value) { return ToString(value.GetValue()); }							  \
-    static constexpr std::string ToString(const this_type& value) { return ToString(value.GetValue()); }							  \
-    static constexpr std::string ToString(underlying_type value, const std::string& fallback = "<unknown>")							  \
-    {																																  \
-        return ToCString(value, fallback.c_str());																					  \
-    }																																  \
-                                                                                                                                      \
-    static constexpr const char* ToCString(underlying_type value, const char* fallback = "<unknown>")								  \
-    {																																  \
-        int index = IndexOf(value);																									  \
-        if (index == -1)																											  \
-            return fallback;																										  \
-        return CStrValues[index];																									  \
-    }																																  \
-                                                                                                                                      \
-    static constexpr int IndexOf(underlying_type value)																				  \
-    {																																  \
-        switch (value)																												  \
-        {																															  \
-            FOR_EACH(ImplementSimpleXEnumIndexOfCase, _first_val_, __VA_ARGS__)														  \
-        }																															  \
-        return -1;																													  \
-    }																																  \
+#define ImplementSimpleXEnum_FullDeclaration(_name_, _underlying_enum_macro_, _underlying_type_, _starting_val_, _first_val_, ...)      \
+struct _name_ : public XEnum::EnumValue<_name_, _underlying_type_>                                                                      \
+{                                                                                                                                       \
+    using this_type = _name_;                                                                                                           \
+    using EnumValue = XEnum::EnumValue<_name_, _underlying_type_>;                                                                      \
+                                                                                                                                        \
+private:                                                                                                                                \
+                                                                                                                                        \
+    enum class underlying_enum_index : s                                                                                                \
+    {                                                                                                                                   \
+        FOR_EACH(ImplementSimpleXEnumUnderlyingIndexDeclaration, _first_val_, __VA_ARGS__)                                              \
+    };                                                                                                                                  \
+    _underlying_enum_macro_(_starting_val_, _first_val_, __VA_ARGS__)                                                                   \
+                                                                                                                                        \
+public:                                                                                                                                 \
+                                                                                                                                        \
+    _name_() = delete;                                                                                                                  \
+    constexpr _name_(const underlying_type& val) : EnumValue(val) {}                                                                    \
+    constexpr _name_(const this_type& val) : EnumValue(val) {}                                                                          \
+    constexpr _name_(const EnumValue& val) : EnumValue(val) {}                                                                          \
+                                                                                                                                        \
+    FOR_EACH(ImplementSimpleXEnumValueDeclaration, _first_val_, __VA_ARGS__)                                                            \
+                                                                                                                                        \
+    static constexpr std::array Values =                                                                                                \
+    {                                                                                                                                   \
+        FOR_EACH(ImplementSimpleXEnumValArrayEntry, _first_val_, __VA_ARGS__)                                                           \
+    };                                                                                                                                  \
+    static constexpr const char* CStrValues[] =                                                                                         \
+    {                                                                                                                                   \
+        FOR_EACH(ImplementSimpleXEnumStrArrayEntry, _first_val_, __VA_ARGS__)                                                           \
+    };                                                                                                                                  \
+    static constexpr auto Count = Values.size();                                                                                        \
+                                                                                                                                        \
+    static constexpr std::string ToString(const EnumValue& value) { return ToString(value.GetValue()); }                                \
+    static constexpr std::string ToString(const this_type& value) { return ToString(value.GetValue()); }                                \
+    static constexpr std::string ToString(underlying_type value, const std::string& fallback = "<unknown>")                             \
+    {                                                                                                                                   \
+        return ToCString(value, fallback.c_str());                                                                                      \
+    }                                                                                                                                   \
+                                                                                                                                        \
+    static constexpr const char* ToCString(underlying_type value, const char* fallback = "<unknown>")                                   \
+    {                                                                                                                                   \
+        int index = IndexOf(value);                                                                                                     \
+        if (index == -1)                                                                                                                \
+            return fallback;                                                                                                            \
+        return CStrValues[index];                                                                                                       \
+    }                                                                                                                                   \
+                                                                                                                                        \
+    static constexpr int IndexOf(underlying_type value)                                                                                 \
+    {                                                                                                                                   \
+        switch (value)                                                                                                                  \
+        {                                                                                                                               \
+            FOR_EACH(ImplementSimpleXEnumIndexOfCase, _first_val_, __VA_ARGS__)                                                         \
+        }                                                                                                                               \
+        return -1;                                                                                                                      \
+    }                                                                                                                                   \
 };
 
 //=========================================================================
 // Implementation Macros
 //=========================================================================
-#define ImplementSimpleXEnum(_name_, ...) ImplementSimpleXEnum_FullDeclaration(_name_, ImplementSimpleXEnumUnderlyingEnumDeclaration, int, 0, ___VA_ARGS__)		   
+#define ImplementSimpleXEnum(_name_, ...) ImplementSimpleXEnum_FullDeclaration(_name_, ImplementSimpleXEnumUnderlyingEnumDeclaration, int, 0, ___VA_ARGS__)           
 #define ImplementSimpleXEnumWithUnderlyingType(_name_, _underlying_type_, ...) ImplementSimpleXEnum_FullDeclaration(_name_,ImplementSimpleXEnumUnderlyingEnumDeclaration, _underlying_type_, 0, __VA_ARGS__)
 #define ImplementSimpleXEnumWithStartingValue(_name_, _start_value_, ...) ImplementSimpleXEnum_FullDeclaration(_name_, ImplementSimpleXEnumUnderlyingEnumDeclaration, int, _start_value_, __VA_ARGS__)
 #define ImplementSimpleXEnumFlags(_name_, ...)  ImplementSimpleXEnum_FullDeclaration(_name_, ImplementSimpleXEnumUnderlyingEnumDeclarationFlags, size_t, 0, __VA_ARGS__)
@@ -251,20 +251,20 @@ public:																																  \
 // XValue is a standard value, defaults to whatever was before it +1
 //=========================================================================
 #define ImplementXEnumUnderlyngAssignmentXValue(_name_, ...) \
-    VALUE_IFNOT(__VA_OPT__(1),  _name_)\
+    VALUE_IFNOT(__VA_OPT__(1),  _name_)                      \
     __VA_OPT__(_name_ = __VA_ARGS__),
 
 #define ImplementXEnumIndexAssignmentXValue(_name_, ...)   _name_,
 #define ImplementXEnumValueDeclarationXValue(_name_, ...) static constexpr auto _name_ = EnumValue{ static_cast<underlying_type>(underlying_enum :: _name_) };
 #define ImplementXEnumArrayEntryDeclarationXValue(_name_, ...) _name_,
-#define ImplementXEnumToStringCaseXValue(_name_, ...) case _name_ : return static_cast<int>(underlying_index_enum :: _name_);	
+#define ImplementXEnumToStringCaseXValue(_name_, ...) case _name_ : return static_cast<int>(underlying_index_enum :: _name_);    
 #define ImplementXEnumToCStringDeclarationXValue(_name_, ...) #_name_,
 
 //=========================================================================
 // XFlag defaults to 1 << index, parameter allows regular assignment
 //=========================================================================
-#define ImplementXEnumUnderlyngAssignmentXFlag(_name_, ...)  \
-    VALUE_IFNOT(__VA_OPT__(1),  _name_ = 1 << static_cast<int>(underlying_index_enum :: _name_ ))\
+#define ImplementXEnumUnderlyngAssignmentXFlag(_name_, ...)                                          \
+    VALUE_IFNOT(__VA_OPT__(1),  _name_ = 1 << static_cast<int>(underlying_index_enum :: _name_ ))    \
     __VA_OPT__(_name_ = 1 << static_cast<int>(__VA_ARGS__)),
 
 #define ImplementXEnumIndexAssignmentXFlag(_name_, ...) ImplementXEnumIndexAssignmentXValue(_name_, __VA_ARGS__)
@@ -277,7 +277,7 @@ public:																																  \
 // XFlagState does not appear in the values array and defaults to 0 if no value is provided
 //=========================================================================
 #define ImplementXEnumUnderlyngAssignmentXFlagState(_name_, ...)  \
-    VALUE_IFNOT(__VA_OPT__(1),  _name_ = 0)\
+    VALUE_IFNOT(__VA_OPT__(1),  _name_ = 0)                       \
     __VA_OPT__(_name_ = __VA_ARGS__),
 
 #define ImplementXEnumIndexAssignmentXFlagState(_name_, ...) ImplementXEnumIndexAssignmentXValue(_name_, __VA_ARGS__)
@@ -299,80 +299,80 @@ public:																																  \
 //=========================================================================
 // Macro variant construction enum
 //=========================================================================
-#define ImplmenetXEnum_FullDeclaration(_name_, _underlying_type_, ...)															   \
-struct _name_ : public XEnum::EnumValue<_name_, _underlying_type_>																   \
-{																																   \
-    using this_type = _name_;																									   \
-    using EnumValue = XEnum::EnumValue<_name_, _underlying_type_>;																   \
-                                                                                                                                   \
-private:																														   \
-                                                                                                                                   \
-    enum class underlying_index_enum : size_t { FOR_EACH_MACRO(ImplementXEnumIndexAssignment, __VA_ARGS__) };					   \
-    enum class underlying_enum : underlying_type { FOR_EACH_MACRO(ImplementXEnumUnderlyngAssignment, __VA_ARGS__) };			   \
-                                                                                                                                   \
-public:																															   \
-                                                                                                                                   \
-    _name_() = delete;																											   \
-    constexpr _name_(const underlying_type& val) : EnumValue(val) {}															   \
-    constexpr _name_(const this_type& val) : EnumValue(val) {}																	   \
-    constexpr _name_(const EnumValue& val) : EnumValue(val) {}																	   \
-                                                                                                                                   \
-    FOR_EACH_MACRO(ImplementXEnumValueDeclaration, __VA_ARGS__)																	   \
-                                                                                                                                   \
-    static constexpr std::array Values =																						   \
-    {																															   \
-        FOR_EACH_MACRO(ImplementXEnumArrayEntryDeclaration, __VA_ARGS__)														   \
-    };																															   \
-    static constexpr const char* CStrValues[] =																					   \
-    {																															   \
-        FOR_EACH_MACRO(ImplementXEnumToCStringDeclaration, __VA_ARGS__)															   \
-    };																															   \
-    static constexpr auto Count = Values.size();																				   \
-                                                                                                                                   \
-    static constexpr std::string ToString(const EnumValue& value) { return ToString(value.GetValue()); }						   \
-    static constexpr std::string ToString(const this_type& value) { return ToString(value.GetValue()); }						   \
-    static constexpr std::string ToString(underlying_type value, const std::string& fallback = "<unknown>")						   \
-    {																															   \
-        return ToCString(value, fallback.c_str());																				   \
-    }																															   \
-                                                                                                                                   \
-    static constexpr const char* ToCString(underlying_type value, const char* fallback = "<unknown>")							   \
-    {																															   \
-        int index = IndexOf(value);																								   \
-        if (index == -1)																										   \
-            return fallback;																									   \
-        return CStrValues[index];																								   \
-    }																															   \
-                                                                                                                                   \
-    static constexpr int IndexOf(underlying_type value)																			   \
-    {																															   \
-        switch (value)																											   \
-        {																														   \
-            FOR_EACH_MACRO(ImplementXEnumToStringCase, __VA_ARGS__)																   \
-        }																														   \
-        return -1;																												   \
-    }																															   \
-};		
+#define ImplmenetXEnum_FullDeclaration(_name_, _underlying_type_, ...)                                                               \
+struct _name_ : public XEnum::EnumValue<_name_, _underlying_type_>                                                                   \
+{                                                                                                                                    \
+    using this_type = _name_;                                                                                                        \
+    using EnumValue = XEnum::EnumValue<_name_, _underlying_type_>;                                                                   \
+                                                                                                                                     \
+private:                                                                                                                             \
+                                                                                                                                     \
+    enum class underlying_index_enum : size_t { FOR_EACH_MACRO(ImplementXEnumIndexAssignment, __VA_ARGS__) };                        \
+    enum class underlying_enum : underlying_type { FOR_EACH_MACRO(ImplementXEnumUnderlyngAssignment, __VA_ARGS__) };                 \
+                                                                                                                                     \
+public:                                                                                                                              \
+                                                                                                                                     \
+    _name_() = delete;                                                                                                               \
+    constexpr _name_(const underlying_type& val) : EnumValue(val) {}                                                                 \
+    constexpr _name_(const this_type& val) : EnumValue(val) {}                                                                       \
+    constexpr _name_(const EnumValue& val) : EnumValue(val) {}                                                                       \
+                                                                                                                                     \
+    FOR_EACH_MACRO(ImplementXEnumValueDeclaration, __VA_ARGS__)                                                                      \
+                                                                                                                                     \
+    static constexpr std::array Values =                                                                                             \
+    {                                                                                                                                \
+        FOR_EACH_MACRO(ImplementXEnumArrayEntryDeclaration, __VA_ARGS__)                                                             \
+    };                                                                                                                               \
+    static constexpr const char* CStrValues[] =                                                                                      \
+    {                                                                                                                                \
+        FOR_EACH_MACRO(ImplementXEnumToCStringDeclaration, __VA_ARGS__)                                                              \
+    };                                                                                                                               \
+    static constexpr auto Count = Values.size();                                                                                     \
+                                                                                                                                     \
+    static constexpr std::string ToString(const EnumValue& value) { return ToString(value.GetValue()); }                             \
+    static constexpr std::string ToString(const this_type& value) { return ToString(value.GetValue()); }                             \
+    static constexpr std::string ToString(underlying_type value, const std::string& fallback = "<unknown>")                          \
+    {                                                                                                                                \
+        return ToCString(value, fallback.c_str());                                                                                   \
+    }                                                                                                                                \
+                                                                                                                                     \
+    static constexpr const char* ToCString(underlying_type value, const char* fallback = "<unknown>")                                \
+    {                                                                                                                                \
+        int index = IndexOf(value);                                                                                                  \
+        if (index == -1)                                                                                                             \
+            return fallback;                                                                                                         \
+        return CStrValues[index];                                                                                                    \
+    }                                                                                                                                \
+                                                                                                                                     \
+    static constexpr int IndexOf(underlying_type value)                                                                              \
+    {                                                                                                                                \
+        switch (value)                                                                                                               \
+        {                                                                                                                            \
+            FOR_EACH_MACRO(ImplementXEnumToStringCase, __VA_ARGS__)                                                                  \
+        }                                                                                                                            \
+        return -1;                                                                                                                   \
+    }                                                                                                                                \
+};        
 
 //=========================================================================
 // Implementration Aliases
 //=========================================================================
-#define ImplementXEnum(_name_, ...) ImplmenetXEnum_FullDeclaration(_name_, int, __VA_ARGS__)			
+#define ImplementXEnum(_name_, ...) ImplmenetXEnum_FullDeclaration(_name_, int, __VA_ARGS__)            
 #define ImplementXEnumWithUnderlyingType(_name_, _type_, ...) ImplmenetXEnum_FullDeclaration(_name_, _type_, __VA_ARGS__)
 //=========================================================================
 // Examples
 //=========================================================================
 /*
     ImplementXEnum(ExampleEnum,
-        XValue(a),				// 0
-        XValue(b, 3),			// 3
-        XValue(d),				// 4
-        XAlias(e, d),			// 4
-        XFlag(f),				// 1 << 3
-        XFlag(g),				// 1 << 4
-        XFlag(h, 5),			// 1 << 5
-        XValue(x),				// 33
-        XFlagState(y, f | g),	// 24
+        XValue(a),               // 0
+        XValue(b, 3),            // 3
+        XValue(d),               // 4
+        XAlias(e, d),            // 4
+        XFlag(f),                // 1 << 3
+        XFlag(g),                // 1 << 4
+        XFlag(h, 5),             // 1 << 5
+        XValue(x),               // 33
+        XFlagState(y, f | g),    // 24
     );
 */
 //=========================================================================
