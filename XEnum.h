@@ -105,7 +105,7 @@ namespace XEnum
 
         // Shift operators
         friend constexpr EnumValue operator<<(const EnumValue& lhs, const underlying_type& rhs) { return lhs.Value << rhs; }
-        friend constexpr EnumValue operator>>(const EnumValue& lhs, const underlying_type& rhs) { return lhs.Value >> lhs; }
+        friend constexpr EnumValue operator>>(const EnumValue& lhs, const underlying_type& rhs) { return lhs.Value >> rhs; }
 
         // Flag functions
         constexpr bool IsSet(underlying_type index) const { return (Value & (1 << index)) != 0; }
