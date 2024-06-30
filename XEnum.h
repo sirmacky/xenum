@@ -99,9 +99,9 @@ namespace XEnum
         constexpr EnumValue& operator&=(const underlying_type& val) { Value &= val; return *this; }
         constexpr EnumValue& operator^=(const underlying_type& val) { Value ^= val; return *this; }
 
-        friend constexpr EnumValue& operator&(EnumValue lhs, const EnumValue& rhs) { lhs &= rhs; return lhs; }
-        friend constexpr EnumValue& operator|(EnumValue lhs, const EnumValue& rhs) { lhs |= rhs; return lhs; }
-        friend constexpr EnumValue& operator^(EnumValue lhs, const EnumValue& rhs) { lhs ^= rhs; return lhs; }
+        friend constexpr EnumValue operator&(EnumValue lhs, const EnumValue& rhs) { lhs &= rhs; return lhs; }
+        friend constexpr EnumValue operator|(EnumValue lhs, const EnumValue& rhs) { lhs |= rhs; return lhs; }
+        friend constexpr EnumValue operator^(EnumValue lhs, const EnumValue& rhs) { lhs ^= rhs; return lhs; }
 
         // Shift operators
         friend constexpr EnumValue operator<<(const EnumValue& lhs, const underlying_type& rhs) { return lhs.Value >> rhs; }
