@@ -1,4 +1,4 @@
-A set of advanced enum generator macros for c++20 to make enum generation and management more consistent and powerful by generating XEnumTypeTraits alongside the enum declaration
+A set of advanced enum generator macros for c++20 to make enum generation and management more consistent and powerful by generating XEnumTraits alongside the enum declaration
 
 Example usage
 ```
