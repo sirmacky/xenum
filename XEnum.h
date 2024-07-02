@@ -271,7 +271,7 @@ public:                                                                         
 #define ImplementXEnumValueDeclarationXFlag(_name_, ...) ImplementXEnumValueDeclarationXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumArrayEntryDeclarationXFlag(_name_, ...) ImplementXEnumArrayEntryDeclarationXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumToStringCaseXFlag(_name_, ...) ImplementXEnumToStringCaseXValue(_name_, __VA_ARGS__)
-#define ImplementXEnumToCStringDeclarationXFlag(_name_, ...) ImplementXEnumToCStringDeclarationXValue(_name, __VA_ARGS__)
+#define ImplementXEnumToCStringDeclarationXFlag(_name_, ...) ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
 
 //=========================================================================
 // XFlagState does not appear in the values array and defaults to 0 if no value is provided
@@ -284,7 +284,7 @@ public:                                                                         
 #define ImplementXEnumValueDeclarationXFlagState(_name_, ...) ImplementXEnumValueDeclarationXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumArrayEntryDeclarationXFlagState(_name_, ...)
 #define ImplementXEnumToStringCaseXFlagState(_name_, ...) ImplementXEnumToStringCaseXValue(_name_, __VA_ARGS__)
-#define ImplementXEnumToCStringDeclarationXFlagState(_name_, ...) ImplementXEnumToCStringDeclarationXValue(_name, __VA_ARGS__)
+#define ImplementXEnumToCStringDeclarationXFlagState(_name_, ...) ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
 
 //=========================================================================
 // XAlias does not appear in the index (as it's covered) nor does it have a string, or an index value associated with it, just a reference and an underlying enum reference
@@ -294,7 +294,7 @@ public:                                                                         
 #define ImplementXEnumValueDeclarationXAlias(_name_, ...) ImplementXEnumValueDeclarationXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumArrayEntryDeclarationXAlias(_name_, ...) //ImplementXEnumArrayEntryDeclarationXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumToStringCaseXAlias(_name_, ...) 
-#define ImplementXEnumToCStringDeclarationXAlias(_name_, ...) //ImplementXEnumToCStringDeclarationXValue(_name, __VA_ARGS__)
+#define ImplementXEnumToCStringDeclarationXAlias(_name_, ...) //ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
 
 //=========================================================================
 // Macro variant construction enum
