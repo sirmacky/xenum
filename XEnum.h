@@ -54,6 +54,7 @@
 #include <string>
 #include <iostream>
 #include <concepts>
+#include <array>
 
 namespace XEnum
 {
@@ -74,6 +75,8 @@ namespace XEnum
         constexpr operator std::string() const { return ToString(); }
         constexpr operator underlying_type() const { return Value; }
 
+        constexpr EnumValue& operator=(const EnumValue& C) = default;
+        
         friend constexpr auto operator<=>(const EnumValue&, const EnumValue&) = default;
         friend constexpr std::ostream& operator<<(std::ostream& os, const EnumValue& value) { return os << value.ToCString(); }
 
@@ -274,19 +277,6 @@ public:                                                                         
 #define ImplementXEnumToCStringDeclarationXFlag(_name_, ...) ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
 
 //=========================================================================
-// XFlagState does not appear in the values array and defaults to 0 if no value is provided
-//=========================================================================
-#define ImplementXEnumUnderlyngAssignmentXFlagState(_name_, ...)  \
-    VALUE_IFNOT(__VA_OPT__(1),  _name_ = 0)                       \
-    __VA_OPT__(_name_ = __VA_ARGS__),
-
-#define ImplementXEnumIndexAssignmentXFlagState(_name_, ...) ImplementXEnumIndexAssignmentXValue(_name_, __VA_ARGS__)
-#define ImplementXEnumValueDeclarationXFlagState(_name_, ...) ImplementXEnumValueDeclarationXValue(_name_, __VA_ARGS__)
-#define ImplementXEnumArrayEntryDeclarationXFlagState(_name_, ...)
-#define ImplementXEnumToStringCaseXFlagState(_name_, ...) ImplementXEnumToStringCaseXValue(_name_, __VA_ARGS__)
-#define ImplementXEnumToCStringDeclarationXFlagState(_name_, ...) ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
-
-//=========================================================================
 // XAlias does not appear in the index (as it's covered) nor does it have a string, or an index value associated with it, just a reference and an underlying enum reference
 //=========================================================================
 #define ImplementXEnumUnderlyngAssignmentXAlias(_name_, ...)  ImplementXEnumUnderlyngAssignmentXValue(_name_, __VA_ARGS__)
@@ -295,6 +285,19 @@ public:                                                                         
 #define ImplementXEnumArrayEntryDeclarationXAlias(_name_, ...) //ImplementXEnumArrayEntryDeclarationXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumToStringCaseXAlias(_name_, ...) 
 #define ImplementXEnumToCStringDeclarationXAlias(_name_, ...) //ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
+
+//=========================================================================
+// XFlagState does not appear in the values array and defaults to 0 if no value is provided
+//=========================================================================
+#define ImplementXEnumUnderlyngAssignmentXFlagState(_name_, ...)  \
+    VALUE_IFNOT(__VA_OPT__(1),  _name_ = 0)                       \
+    __VA_OPT__(_name_ = __VA_ARGS__),
+
+#define ImplementXEnumIndexAssignmentXFlagState(_name_, ...) ImplementXEnumIndexAssignmentXAlias(_name_, __VA_ARGS__)
+#define ImplementXEnumValueDeclarationXFlagState(_name_, ...) ImplementXEnumValueDeclarationXAlias(_name_, __VA_ARGS__)
+#define ImplementXEnumArrayEntryDeclarationXFlagState(_name_, ...) ImplementXEnumArrayEntryDeclarationXAlias(_name_, __VA_ARGS__)
+#define ImplementXEnumToStringCaseXFlagState(_name_, ...) ImplementXEnumToStringCaseXAlias(_name_, __VA_ARGS__)
+#define ImplementXEnumToCStringDeclarationXFlagState(_name_, ...) ImplementXEnumToCStringDeclarationXAlias(_name_, __VA_ARGS__)
 
 //=========================================================================
 // Macro variant construction enum
