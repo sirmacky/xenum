@@ -14,3 +14,49 @@ ImplementXEnum(ExampleEnum,
     XFlagState(y, f | g),    // 24
 );
 ```
+
+Generates an enum class and type traits override that satisfies the following criteria
+```
+struct XEnumTraits<ExampleEnum>
+{
+    static constexpr bool is_valid = true;
+    static constexpr const char* const name;
+    static constexpr size_t Count;
+    static constexpr std::array<MyEnum, Count> Values;
+    static constexpr const char* CStrValues[Count];
+    static constexpr std::string ToString(EnumType value, const std::string& fallback = "<unknown>");
+    static constexpr const char* ToCString(EnumType value, const char* fallback = "<unknown>");
+    static constexpr int IndexOf(EnumType value);
+};
+```
+
+This can be used to generate convenience functions like logging, or imgui combo boxes
+```
+    template <XEnumValue T>
+    bool Combo(const char* const label, T& value, ImGuiComboFlags flags = 0)
+    {
+        auto origValue = value;
+
+        if (ImGui::BeginCombo(label, XEnumTraits<T>::ToCString(value), flags))
+        {
+            for (const auto& option : XEnumTraits<T>::Values)
+            {
+                bool is_selected = option == value;
+                if (ImGui::Selectable(XEnumTraits<T>::ToCString(option), is_selected))
+                    value = option;
+                if (is_selected)
+                    ImGui::SetItemDefaultFocus();
+            }
+
+            ImGui::EndCombo();
+        }
+
+        return origValue != value;
+    }
+
+    template <typename T> requires XEnumTraits<T>::is_valid
+    bool Combo(T& value, ImGuiComboFlags flags = 0)
+    {
+        return Combo(XEnumTraits<T>::name, value, flags);
+    }
+```
