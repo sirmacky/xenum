@@ -87,19 +87,6 @@ static_assert(false, "These macros must remain UNDEFINED for XEnum to work")
 #define ImplementXEnumArrayEntryDeclarationXFlag(_name_, ...) ImplementXEnumArrayEntryDeclarationXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumToStringCaseXFlag(_name_, ...) ImplementXEnumToStringCaseXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumToCStringDeclarationXFlag(_name_, ...) ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
-
-//=========================================================================
-// XFlagState does not appear in the values array and defaults to 0 if no value is provided
-//=========================================================================
-#define ImplementXEnumUnderlyngAssignmentXFlagState(_name_, ...)  \
-	VALUE_IFNOT(__VA_OPT__(1),  _name_ = 0)\
-	__VA_OPT__(_name_ = __VA_ARGS__),
-
-#define ImplementXEnumIndexAssignmentXFlagState(_name_, ...) ImplementXEnumIndexAssignmentXValue(_name_, __VA_ARGS__)
-#define ImplementXEnumArrayEntryDeclarationXFlagState(_name_, ...)
-#define ImplementXEnumToStringCaseXFlagState(_name_, ...) ImplementXEnumToStringCaseXValue(_name_, __VA_ARGS__)
-#define ImplementXEnumToCStringDeclarationXFlagState(_name_, ...) ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
-
 //=========================================================================
 // XAlias does not appear in the index (as it's covered) nor does it have a string, or an index value associated with it, just a reference and an underlying enum reference
 //=========================================================================
@@ -108,6 +95,18 @@ static_assert(false, "These macros must remain UNDEFINED for XEnum to work")
 #define ImplementXEnumArrayEntryDeclarationXAlias(_name_, ...) //ImplementXEnumArrayEntryDeclarationXValue(_name_, __VA_ARGS__)
 #define ImplementXEnumToStringCaseXAlias(_name_, ...) 
 #define ImplementXEnumToCStringDeclarationXAlias(_name_, ...) //ImplementXEnumToCStringDeclarationXValue(_name_, __VA_ARGS__)
+
+//=========================================================================
+// XFlagState is currently just an alias. It is intended not to appear in the values array and defaults to 0 if no value is provided
+//=========================================================================
+#define ImplementXEnumUnderlyngAssignmentXFlagState(_name_, ...)  \
+	VALUE_IFNOT(__VA_OPT__(1),  _name_ = 0)\
+	__VA_OPT__(_name_ = __VA_ARGS__),
+
+#define ImplementXEnumIndexAssignmentXFlagState(_name_, ...) ImplementXEnumIndexAssignmentXAlias(_name_, __VA_ARGS__)
+#define ImplementXEnumArrayEntryDeclarationXFlagState(_name_, ...)
+#define ImplementXEnumToStringCaseXFlagState(_name_, ...) ImplementXEnumToStringCaseXAlias(_name_, __VA_ARGS__)
+#define ImplementXEnumToCStringDeclarationXFlagState(_name_, ...) ImplementXEnumToCStringDeclarationXAlias(_name_, __VA_ARGS__)
 
 //=========================================================================
 // Macro variant construction enum
