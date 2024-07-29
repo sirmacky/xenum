@@ -15,7 +15,23 @@ ImplementXEnum(ExampleEnum,
 );
 ```
 
-Generates an enum class and type traits override that satisfies the following criteria
+Generates the following `Enum Class`
+```
+enum class ExampleEnum
+{
+    a,
+    b = 3,
+    d,
+    e = d,
+    f = 1 << 3,
+    g = 1 << 4,
+    h = 1 << 5,
+    x = 33,
+    y = f | g,
+};
+```
+
+And an `XEnumTraits` specialization for it that satisfies the following criteria
 ```
 struct XEnumTraits<ExampleEnum>
 {
@@ -30,33 +46,33 @@ struct XEnumTraits<ExampleEnum>
 };
 ```
 
-This can be used to generate convenience functions like logging, or imgui combo boxes
+Which can be used to generate convenience functions like logging, or imgui combo boxes
 ```
-    template <XEnumValue T>
-    bool Combo(const char* const label, T& value, ImGuiComboFlags flags = 0)
+template <XEnumValue T>
+bool Combo(const char* const label, T& value, ImGuiComboFlags flags = 0)
+{
+    auto origValue = value;
+
+    if (ImGui::BeginCombo(label, XEnumTraits<T>::ToCString(value), flags))
     {
-        auto origValue = value;
-
-        if (ImGui::BeginCombo(label, XEnumTraits<T>::ToCString(value), flags))
+        for (const auto& option : XEnumTraits<T>::Values)
         {
-            for (const auto& option : XEnumTraits<T>::Values)
-            {
-                bool is_selected = option == value;
-                if (ImGui::Selectable(XEnumTraits<T>::ToCString(option), is_selected))
-                    value = option;
-                if (is_selected)
-                    ImGui::SetItemDefaultFocus();
-            }
-
-            ImGui::EndCombo();
+            bool is_selected = option == value;
+            if (ImGui::Selectable(XEnumTraits<T>::ToCString(option), is_selected))
+                value = option;
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();
         }
 
-        return origValue != value;
+        ImGui::EndCombo();
     }
 
-    template <typename T> requires XEnumTraits<T>::is_valid
-    bool Combo(T& value, ImGuiComboFlags flags = 0)
-    {
-        return Combo(XEnumTraits<T>::name, value, flags);
-    }
+    return origValue != value;
+}
+
+template <typename T> requires XEnumTraits<T>::is_valid
+bool Combo(T& value, ImGuiComboFlags flags = 0)
+{
+    return Combo(XEnumTraits<T>::name, value, flags);
+}
 ```
