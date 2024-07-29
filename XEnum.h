@@ -53,7 +53,9 @@
 #include <array>
 #include <string>
 
-template<typename EnumType> struct XEnumTraits {};
+template<typename EnumType> struct XEnumTraits { static constexpr bool is_valid = false; };
+
+template<typename EnumType> concept XEnumValue = XEnumTraits<EnumType>::is_valid;
 
 //=========================================================================
 // Safety Checks to help diagnose potential issues
@@ -99,9 +101,9 @@ static_assert(false, "These macros must remain UNDEFINED for XEnum to work")
 //=========================================================================
 // XFlagState is currently just an alias. It is intended not to appear in the values array and defaults to 0 if no value is provided
 //=========================================================================
-#define ImplementXEnumUnderlyngAssignmentXFlagState(_name_, ...)  \
-	VALUE_IFNOT(__VA_OPT__(1),  _name_ = 0)\
-	__VA_OPT__(_name_ = __VA_ARGS__),
+#define ImplementXEnumUnderlyngAssignmentXFlagState(_name_, ...) _name_ =  \
+	VALUE_IFNOT(__VA_OPT__(1), 0)\
+	__VA_OPT__(__VA_ARGS__),
 
 #define ImplementXEnumIndexAssignmentXFlagState(_name_, ...) ImplementXEnumIndexAssignmentXAlias(_name_, __VA_ARGS__)
 #define ImplementXEnumArrayEntryDeclarationXFlagState(_name_, ...)
@@ -121,6 +123,8 @@ enum class _name_ : _underlying_type_																				   \
 template<>																											   \
 struct XEnumTraits< _name_ >																						   \
 {																													   \
+	static constexpr bool is_valid = true;																			   \
+    static constexpr const char* const name = #_name_ ;																   \
 	using EnumType = _name_;																						   \
 	enum class underlying_index_enum : size_t																		   \
 	{																												   \
